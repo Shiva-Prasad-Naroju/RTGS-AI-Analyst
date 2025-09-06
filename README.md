@@ -16,18 +16,40 @@ RTGS AI Analyst is an MVP (Minimum Viable Product) built for buildathons that de
 - 📋 **Comprehensive Reports** - Step-by-step PDF reports with recommendations
 - 🎛️ **Interactive & Automated Modes** - Choose human oversight or full automation
 
+# RTGS-AI-Analyst Workflow
+
+This diagram shows the **Supervisor-Agent System** and the data processing workflow from raw dataset to cleaned outputs and reports.
+
 ```mermaid
 graph TD
-    RAW[📁 Raw Dataset] --> ING[🔍 Ingestion Agent: Load & Validate CSV/XLSX]
-    ING --> INSP[🔎 Inspection Agent: Identify Data Quality Issues]
-    INSP --> CLEAN_AGENT[🧹 Cleaning Agent: Handle Missing Values, Duplicates, Outliers (HITL)]
-    CLEAN_AGENT --> TRANS[🔄 Transformation Agent: Encoding, Scaling, Feature Engineering]
-    TRANS --> VERIFY[✅ Verification Agent: Validate Data Quality & Consistency]
-    VERIFY --> ANAL[🧠 Analysis Agent: AI-powered Insights & Recommendations]
-    ANAL --> VIS[📊 Visualization Agent: Create Charts & Export PDF]
-    VIS --> REPORT[📋 Report Agent: Step-by-step Analysis Reports]
-    REPORT --> CLEAN[Cleansed Dataset]
-    REPORT --> PDF_OUT[PDF Reports]
+    SUP[Supervisor Agent] 
+
+    RAW[Raw Dataset]
+    ING[Ingestion Agent - Load & Validate]
+    INSP[Inspection Agent - Identify Issues]
+    CLEAN_AGENT[Cleaning Agent - Missing Values, Duplicates, Outliers HITL]
+    TRANS[Transformation Agent - Encoding, Scaling, Feature Engineering]
+    VERIFY[Verification Agent - Validate Data Quality]
+    ANAL[Analysis Agent - AI Insights & Recommendations]
+    VIS[Visualization Agent - Charts & PDF]
+    REPORT[Report Agent - Step-by-step Reports]
+    CLEAN[Cleansed Dataset]
+    PDF_OUT[PDF Reports]
+
+    %% Supervisor orchestrates all sub-agents
+    SUP --> ING
+    SUP --> INSP
+    SUP --> CLEAN_AGENT
+    SUP --> TRANS
+    SUP --> VERIFY
+    SUP --> ANAL
+    SUP --> VIS
+    SUP --> REPORT
+
+    %% Linear Data Flow
+    RAW --> ING --> INSP --> CLEAN_AGENT --> TRANS --> VERIFY --> ANAL --> VIS --> REPORT
+    REPORT --> CLEAN
+    REPORT --> PDF_OUT
 ```
 
 ## 🏗️ Architecture
