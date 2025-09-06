@@ -17,28 +17,17 @@ RTGS AI Analyst is an MVP (Minimum Viable Product) built for buildathons that de
 - 🎛️ **Interactive & Automated Modes** - Choose human oversight or full automation
 
 ```mermaid
-flowchart TD
-    style RAW fill:#f0f4f8,stroke:#333,stroke-width:2px
-    style CLEAN fill:#e0f7fa,stroke:#333,stroke-width:2px
-    style PDF fill:#fff3e0,stroke:#333,stroke-width:2px
-    
-    %% Nodes
-    RAW[📁 Raw Dataset]:::RAW
-    ING[🔍 Ingestion Agent<br>Load & Validate CSV/XLSX]
-    INSP[🔎 Inspection Agent<br>Identify data quality issues]
-    CLEAN_AGENT[🧹 Cleaning Agent<br>Handle missing values, duplicates, outliers (HITL)]
-    TRANS[🔄 Transformation Agent<br>Encoding, Scaling, Feature Engineering]
-    VERIFY[✅ Verification Agent<br>Validate final data quality & consistency]
-    ANAL[🧠 Analysis Agent<br>AI-powered insights & recommendations]
-    VIS[📊 Visualization Agent<br>Create charts & export PDF]
-    REPORT[📋 Report Agent<br>Step-by-step analysis reports]
-    CLEAN[Cleansed Dataset]:::CLEAN
-    PDF_OUT[PDF Reports]:::PDF
-
-    %% Flow
-    RAW --> ING --> INSP --> CLEAN_AGENT --> TRANS --> VERIFY --> ANAL --> VIS --> REPORT
-    REPORT --> CLEAN
-    REPORT --> PDF_OUT
+graph TD
+    RAW[📁 Raw Dataset] --> ING[🔍 Ingestion Agent: Load & Validate CSV/XLSX]
+    ING --> INSP[🔎 Inspection Agent: Identify Data Quality Issues]
+    INSP --> CLEAN_AGENT[🧹 Cleaning Agent: Handle Missing Values, Duplicates, Outliers (HITL)]
+    CLEAN_AGENT --> TRANS[🔄 Transformation Agent: Encoding, Scaling, Feature Engineering]
+    TRANS --> VERIFY[✅ Verification Agent: Validate Data Quality & Consistency]
+    VERIFY --> ANAL[🧠 Analysis Agent: AI-powered Insights & Recommendations]
+    ANAL --> VIS[📊 Visualization Agent: Create Charts & Export PDF]
+    VIS --> REPORT[📋 Report Agent: Step-by-step Analysis Reports]
+    REPORT --> CLEAN[Cleansed Dataset]
+    REPORT --> PDF_OUT[PDF Reports]
 ```
 
 ## 🏗️ Architecture
