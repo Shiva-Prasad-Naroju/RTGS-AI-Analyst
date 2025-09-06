@@ -49,6 +49,7 @@ graph LR
     REPORT --> CLEAN
     REPORT --> PDF_OUT
 ```
+
 ---
 
 This diagram shows the **Supervisor-Agent System** and the data processing workflow from raw dataset to cleaned outputs and reports.
