@@ -35,8 +35,8 @@ An intelligent, automated data processing system specifically designed for healt
 
 ```bash
 # Clone the repository
-git clone https://github.com/rtgs-ai/rtgs-ai-analyst.git
-cd rtgs_ai_analyst
+git clone https://github.com/Shiva-Prasad-Naroju/RTGS-AI-Analyst.git
+cd RTGS-AI-Analyst
 
 # Install dependencies
 pip install -r requirements.txt
@@ -59,20 +59,6 @@ python cli.py inspect --csv-file data/hospitals.csv
 
 # Clean data only
 python cli.py clean --csv-file data/hospitals.csv --output-dir cleaned/
-```
-
-### Docker Usage
-
-```bash
-# Build the container
-docker build -t rtgs-analyst .
-
-# Run analysis
-docker run -v $(pwd)/data:/app/data -v $(pwd)/outputs:/app/outputs \
-  rtgs-analyst python cli.py all --csv-file /app/data/hospitals.csv
-
-# Using docker-compose
-docker-compose up
 ```
 
 ## 📁 Project Structure
@@ -208,31 +194,6 @@ rtgs_ai_analyst/
 - **Predictive Modeling**: Prepare data for ML/AI models
 - **Report Generation**: Automated insights for stakeholders
 
-## 🔧 Advanced Configuration
-
-### Custom Healthcare Rules
-```python
-# config.py
-HEALTHCARE_SETTINGS = {
-    'bed_capacity_max': 10000,
-    'establishment_year_min': 1800,
-    'establishment_year_max': 2025,
-    'geographic_inequality_threshold': 3,
-    'capacity_variation_threshold': 1.0
-}
-```
-
-### Quality Thresholds
-```python
-QUALITY_THRESHOLDS = {
-    'null_percentage_warning': 10,
-    'null_percentage_error': 25,
-    'duplicate_percentage_warning': 5,
-    'outlier_threshold': 1.5,
-    'correlation_threshold': 0.7
-}
-```
-
 ## 🧪 Testing
 
 ```bash
@@ -245,18 +206,13 @@ python -m pytest tests/ -v
 # Test with sample data
 python example_usage.py
 
-# Docker testing
-docker-compose -f docker-compose.test.yml up
-```
-
 ## 🤝 Contributing
-
 We welcome contributions! This project was built for a hackathon but is designed to be production-ready and extensible.
 
 ### Development Setup
 ```bash
-git clone https://github.com/rtgs-ai/rtgs-ai-analyst.git
-cd rtgs_ai_analyst
+git clone https://github.com/Shiva-Prasad-Naroju/RTGS-AI-Analyst.git
+cd RTGS-AI-Analyst
 pip install -r requirements.txt
 pip install -e .
 ```
