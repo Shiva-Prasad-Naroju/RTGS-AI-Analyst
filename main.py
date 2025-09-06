@@ -450,7 +450,9 @@ def main():
     print("="*60)
     
     # Example usage with the demo dataset
-    demo_file = "data/raw/Hospitals.csv"
+    # demo_file = "data/raw/Hospitals.csv"
+    # demo_file = "data/raw/agricultural_2019_5.csv"
+    demo_file = "data/raw/consumption_detail_water_works.csv"
     
     if not os.path.exists(demo_file):
         print(f"❌ Demo file not found: {demo_file}")
