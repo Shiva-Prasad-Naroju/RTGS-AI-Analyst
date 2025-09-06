@@ -1,5 +1,4 @@
-"""
-# RTGS-AI-Analyst
+# RTGS-AI-Analyst for hospital dataset:
 
 🤖 **AI-Powered Healthcare Data Analysis Pipeline**
 
@@ -247,5 +246,3 @@ This project was developed for a healthcare data analysis hackathon, demonstrati
 
 *For more examples and advanced usage, check out the `examples/` directory and our documentation wiki.*
 """
-
-# End of complete code continuation
