@@ -16,7 +16,40 @@ RTGS AI Analyst is an MVP (Minimum Viable Product) built for buildathons that de
 - 📋 **Comprehensive Reports** - Step-by-step PDF reports with recommendations
 - 🎛️ **Interactive & Automated Modes** - Choose human oversight or full automation
 
-# RTGS-AI-Analyst Workflow
+### RTGS-AI-Analyst Workflow
+
+This diagram shows the **Supervisor-Agent System** and the data processing workflow from raw dataset to cleaned outputs and reports.  
+It uses a **Supervisor Agent** to orchestrate 8 specialized sub-agents.
+
+```mermaid
+graph LR
+    SUP[Supervisor Agent]
+
+    %% Subgraph container for all sub-agents
+    subgraph SubAgents [ ]
+        ING[Ingestion]
+        INSP[Inspection]
+        CLEAN_AGENT[Cleaning (HITL)]
+        TRANS[Transformation]
+        VERIFY[Verification]
+        ANAL[Analysis]
+        VIS[Visualization]
+        REPORT[Report]
+    end
+
+    RAW[Raw Dataset]
+    CLEAN[Cleansed Dataset]
+    PDF_OUT[PDF Reports]
+
+    %% Supervisor orchestrates all sub-agents
+    SUP --> SubAgents
+
+    %% Linear data flow
+    RAW --> ING --> INSP --> CLEAN_AGENT --> TRANS --> VERIFY --> ANAL --> VIS --> REPORT
+    REPORT --> CLEAN
+    REPORT --> PDF_OUT
+```
+---
 
 This diagram shows the **Supervisor-Agent System** and the data processing workflow from raw dataset to cleaned outputs and reports.
 
