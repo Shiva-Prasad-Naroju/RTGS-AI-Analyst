@@ -13,11 +13,11 @@ try:
 except ImportError:
     GROQ_AVAILABLE = False
     
-try:
-    from langchain_openai import ChatOpenAI
-    OPENAI_AVAILABLE = True
-except ImportError:
-    OPENAI_AVAILABLE = False
+# try:
+#     from langchain_openai import ChatOpenAI
+#     OPENAI_AVAILABLE = True
+# except ImportError:
+#     OPENAI_AVAILABLE = False
 
 from utils import generate_summary_stats, compare_dataframes
 from config import MODEL_CONFIG
@@ -43,13 +43,13 @@ class AnalysisAgent:
                     temperature=MODEL_CONFIG.groq_temperature
                 )
             # Fallback to OpenAI
-            elif OPENAI_AVAILABLE and MODEL_CONFIG.openai_api_key:
-                logger.info(f"{self.name}: Using OpenAI GPT-3.5-Turbo")
-                return ChatOpenAI(
-                    openai_api_key=MODEL_CONFIG.openai_api_key,
-                    model_name=MODEL_CONFIG.openai_model,
-                    temperature=MODEL_CONFIG.openai_temperature
-                )
+            # elif OPENAI_AVAILABLE and MODEL_CONFIG.openai_api_key:
+            #     logger.info(f"{self.name}: Using OpenAI GPT-3.5-Turbo")
+            #     return ChatOpenAI(
+            #         openai_api_key=MODEL_CONFIG.openai_api_key,
+            #         model_name=MODEL_CONFIG.openai_model,
+            #         temperature=MODEL_CONFIG.openai_temperature
+            #     )
             else:
                 logger.warning(f"{self.name}: No LLM available, using rule-based analysis")
                 return None
@@ -57,6 +57,71 @@ class AnalysisAgent:
             logger.warning(f"{self.name}: Failed to initialize LLM: {str(e)}")
             return None
     
+    def analyze_raw_dataset(self, df: pd.DataFrame, inspection_results: Dict[str, Any]) -> Dict[str, Any]:
+        """Analyze the raw dataset and identify vulnerabilities using LLM"""
+        basic_stats = generate_summary_stats(df)
+        quality_metrics = inspection_results.get('inspection_results', {}).get('quality_metrics', {})
+        prompt = f"""
+        You are a senior data analyst. Given the following dataset summary and inspection results, 
+        identify vulnerabilities, provide recommendations, and summarize data quality.
+
+        Dataset Overview:
+        - Shape: {df.shape[0]} rows, {df.shape[1]} columns
+        - Memory usage: {basic_stats['basic_info']['memory_usage_mb']:.1f} MB
+        - Missing data: {quality_metrics.get('missing_percentage', 0):.1f}%
+        - Data types: {quality_metrics.get('column_types', {})}
+
+        Inspection Results:
+        {inspection_results}
+
+        Please respond with:
+        1. Key vulnerabilities (bullet points)
+        2. Recommendations (bullet points)
+        3. Data quality score (0-100)
+        4. Brief professional assessment (max 200 words)
+        """
+        response = self.llm.invoke(prompt)
+        # Parse response (assuming markdown or structured text)
+        analysis_result = {
+            'dataset_overview': {
+                'shape': df.shape,
+                'memory_usage_mb': basic_stats['basic_info']['memory_usage_mb'],
+                'data_types_summary': quality_metrics.get('column_types', {}),
+                'missing_data_summary': f"{quality_metrics.get('missing_percentage', 0):.1f}% missing overall"
+            },
+            'llm_analysis': response.content
+        }
+        return analysis_result
+
+    def analyze_cleaned_dataset(self, df_original: pd.DataFrame, df_cleaned: pd.DataFrame, 
+                              cleaning_results: Dict[str, Any], transformation_results: Dict[str, Any],
+                              verification_results: Dict[str, Any]) -> Dict[str, Any]:
+        """Analyze the cleaned dataset and changes made using LLM"""
+        comparison = compare_dataframes(df_original, df_cleaned)
+        prompt = f"""
+        You are a senior data analyst. Given the following cleaning and transformation results, 
+        summarize improvements, remaining issues, and readiness for analysis.
+
+        Original Dataset: {df_original.shape[0]} rows, {df_original.shape[1]} columns
+        Cleaned Dataset: {df_cleaned.shape[0]} rows, {df_cleaned.shape[1]} columns
+        Cleaning Actions: {cleaning_results.get('cleaning_actions', [])}
+        Transformations: {transformation_results.get('transformations', [])}
+        Verification Results: {verification_results}
+        Data Comparison: {comparison}
+
+        Please respond with:
+        1. Improvements made (bullet points)
+        2. Remaining issues (bullet points)
+        3. Readiness assessment (bullet points)
+        4. Final quality score (0-100)
+        5. Recommendations for further improvement
+        """
+        response = self.llm.invoke(prompt)
+        analysis_result = {
+            'llm_analysis': response.content
+        }
+        return analysis_result
+
     def analyze_raw_dataset(self, df: pd.DataFrame, inspection_results: Dict[str, Any]) -> Dict[str, Any]:
         """Analyze the raw dataset and identify vulnerabilities"""
         

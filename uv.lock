@@ -417,6 +417,15 @@ wheels = [
 ]
 
 [[package]]
+name = "distro"
+version = "1.9.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/fc/f8/98eea607f65de6527f8a2e8885fc8015d3e6f5775df186e443e0964a11c3/distro-1.9.0.tar.gz", hash = "sha256:2fa77c6fd8940f116ee1d6b94a2f90b13b5ea8d019b98bc8bafdcabcdd9bdbed", size = 60722, upload-time = "2023-12-24T09:54:32.31Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/12/b3/231ffd4ab1fc9d679809f356cebee130ac7daa00d6d6f3206dd4fd137e9e/distro-1.9.0-py3-none-any.whl", hash = "sha256:7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2", size = 20277, upload-time = "2023-12-24T09:54:30.421Z" },
+]
+
+[[package]]
 name = "editor"
 version = "1.6.6"
 source = { registry = "https://pypi.org/simple" }
@@ -577,6 +586,23 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/92/2e/ea25914b1ebfde93b6fc4ff46d6864564fba59024e928bdc7de475affc25/greenlet-3.2.4-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:061dc4cf2c34852b052a8620d40f36324554bc192be474b9e9770e8c042fd735", size = 695355, upload-time = "2025-08-07T13:18:34.517Z" },
     { url = "https://files.pythonhosted.org/packages/72/60/fc56c62046ec17f6b0d3060564562c64c862948c9d4bc8aa807cf5bd74f4/greenlet-3.2.4-cp314-cp314-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:44358b9bf66c8576a9f57a590d5f5d6e72fa4228b763d0e43fee6d3b06d3a337", size = 657512, upload-time = "2025-08-07T13:18:33.969Z" },
     { url = "https://files.pythonhosted.org/packages/e3/a5/6ddab2b4c112be95601c13428db1d8b6608a8b6039816f2ba09c346c08fc/greenlet-3.2.4-cp314-cp314-win_amd64.whl", hash = "sha256:e37ab26028f12dbb0ff65f29a8d3d44a765c61e729647bf2ddfbbed621726f01", size = 303425, upload-time = "2025-08-07T13:32:27.59Z" },
+]
+
+[[package]]
+name = "groq"
+version = "0.31.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "anyio" },
+    { name = "distro" },
+    { name = "httpx" },
+    { name = "pydantic" },
+    { name = "sniffio" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f2/e9/f5d523ae8c78aa375addf44d1f64206271d43e6b42d4e5ce3dc76563a75b/groq-0.31.1.tar.gz", hash = "sha256:4d611e0100cb22732c43b53af37933a1b8a5c5a18fa96132fee14e6c15d737e6", size = 141400, upload-time = "2025-09-04T18:01:06.056Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d6/7d/877dbef7d72efacc657777b2e7897baa7cc7fcd0905f1b4a6423269e12a1/groq-0.31.1-py3-none-any.whl", hash = "sha256:536bd5dd6267dea5b3710e41094c0479748da2d155b9e073650e94b7fb2d71e8", size = 134903, upload-time = "2025-09-04T18:01:04.029Z" },
 ]
 
 [[package]]
@@ -859,6 +885,19 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/27/56/a8acbb08a03383c28875b3b151e4cefea5612266917fbd6fc3c14c21e172/langchain_experimental-0.3.4.tar.gz", hash = "sha256:937c4259ee4a639c618d19acf0e2c5c2898ef127050346edc5655259aa281a21", size = 140532, upload-time = "2024-12-20T15:16:09.42Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b2/27/fe8caa4884611286b1f7d6c5cfd76e1fef188faaa946db4fde6daa1cd2cd/langchain_experimental-0.3.4-py3-none-any.whl", hash = "sha256:2e587306aea36b60fa5e5fc05dc7281bee9f60a806f0bf9d30916e0ee096af80", size = 209154, upload-time = "2024-12-20T15:16:07.006Z" },
+]
+
+[[package]]
+name = "langchain-groq"
+version = "0.3.7"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "groq" },
+    { name = "langchain-core" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/54/9d/1bbe0b8d8368ac1df2eabd14be93e052cddac969573b910db4457237bce2/langchain_groq-0.3.7.tar.gz", hash = "sha256:4d799aa565f31e51c632f0f20c588f21c5a0e6c6dd2303efaef43351f9b41bd4", size = 25004, upload-time = "2025-08-05T19:20:45.436Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9d/31/5f32d15105d0160c3753113d5cca5787236c6d2717d25126597d8adc39dd/langchain_groq-0.3.7-py3-none-any.whl", hash = "sha256:2e13870534c032fe1facde3a6ab1fb59af6f1e7a2763125ad549d8e403fc9d00", size = 16418, upload-time = "2025-08-05T19:20:44.4Z" },
 ]
 
 [[package]]
@@ -1668,6 +1707,7 @@ dependencies = [
     { name = "langchain" },
     { name = "langchain-community" },
     { name = "langchain-experimental" },
+    { name = "langchain-groq" },
     { name = "matplotlib" },
     { name = "numpy" },
     { name = "openpyxl" },
@@ -1698,6 +1738,7 @@ requires-dist = [
     { name = "langchain", specifier = ">=0.1.0" },
     { name = "langchain-community", specifier = ">=0.0.1" },
     { name = "langchain-experimental", specifier = ">=0.0.1" },
+    { name = "langchain-groq", specifier = ">=0.3.7" },
     { name = "matplotlib", specifier = ">=3.7.0" },
     { name = "numpy", specifier = ">=1.24.0" },
     { name = "openpyxl", specifier = ">=3.1.0" },

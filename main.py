@@ -7,8 +7,11 @@ import logging
 from typing import Dict, Any, Optional
 import os
 from datetime import datetime
+# from agents.report_agent import EnhancedReportAgent as ReportAgent
+from agents.report_agent import ReportAgent
 
 # Import all agents
+
 from agents import (
     IngestionAgent, InspectionAgent, CleaningAgent, TransformationAgent,
     VerificationAgent, AnalysisAgent, VisualizationAgent, ReportAgent
@@ -235,19 +238,15 @@ class SupervisorAgent:
                 self._display_progress(current_step, total_steps, "Generating Report")
                 
                 step_start = datetime.now()
-                report_result = self.report_agent.process(analysis_result, verification_result)
+                # Pass the DataFrames for enhanced report generation
+                report_result = self.report_agent.process(
+                    analysis_result, 
+                    verification_result,
+                    df_original=df_original,
+                    df_cleaned=df_final        
+                )
                 step_duration = (datetime.now() - step_start).total_seconds()
-                
-                if report_result['status'] == 'error':
-                    self._log_step(current_step, "Report Agent", "FAILED", 
-                                 report_result['message'], step_duration)
-                    logger.warning("Report generation failed, continuing without report")
-                    self.results['report'] = report_result
-                else:
-                    self.results['report'] = report_result
-                    self._log_step(current_step, "Report Agent", "SUCCESS", 
-                                 report_result['message'], step_duration)
-            
+
             # Save final cleaned dataset
             self._save_final_dataset(df_final, df_original)
             
@@ -450,10 +449,10 @@ def main():
     print("="*60)
     
     # Example usage with the demo dataset
-    
+
     # demo_file = "data/raw/Hospitals.csv"
-    # demo_file = "data/raw/agricultural_2019_5.csv"
-    demo_file = "data/raw/consumption_detail_water_works.csv"
+    demo_file = "data/raw/agricultural_2019_5.csv"
+    # demo_file = "data/raw/consumption_detail_water_works.csv"
     
     if not os.path.exists(demo_file):
         print(f"❌ Demo file not found: {demo_file}")
@@ -473,6 +472,7 @@ def main():
         create_visualizations=True,
         generate_report=True
     )
+
     
     # Display final summary
     supervisor.display_final_summary(result)
