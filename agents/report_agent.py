@@ -15,6 +15,7 @@ from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_JUSTIFY
 
 from config import REPORT_CONFIG, PATHS
 from utils import get_timestamp
+from langchain_groq import ChatGroq
 
 logger = logging.getLogger(__name__)
 
@@ -571,65 +572,30 @@ class ReportAgent:
         
         return content
     
-    def generate_report(self, output_path: str, analysis_results: Dict[str, Any],
-                       verification_results: Dict[str, Any]) -> str:
-        """Generate the complete PDF report"""
-        
-        logger.info(f"{self.name}: Generating comprehensive PDF report...")
-        
-        # Ensure output directory exists
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        
-        # Create document
-        doc = SimpleDocTemplate(
-            output_path,
-            pagesize=A4,
-            rightMargin=REPORT_CONFIG['margin']*inch,
-            leftMargin=REPORT_CONFIG['margin']*inch,
-            topMargin=REPORT_CONFIG['margin']*inch,
-            bottomMargin=REPORT_CONFIG['margin']*inch
+    def _generate_report_with_llm(self, analysis_results: Dict[str, Any], verification_results: Dict[str, Any]) -> str:
+        """
+        Use Llama 3.1 8B Instant via ChatGroq to generate a structured report draft.
+        """
+        llm = ChatGroq(model="llama-3-8b-instant")
+        prompt = (
+            "You are a data analyst. Given the following analysis and verification results, "
+            "generate a comprehensive, well-structured report in Markdown format. "
+            "Include sections: Title, Executive Summary, Raw Dataset Analysis, Cleaning & Transformation, "
+            "Quality Metrics, Recommendations, and Appendix. Be concise, insightful, and professional.\n\n"
+            f"Analysis Results:\n{analysis_results}\n\nVerification Results:\n{verification_results}\n"
         )
-        
-        # Build content
-        content = []
-        
-        # Title page
-        logger.info(f"{self.name}: Creating title page...")
-        content.extend(self._create_title_page())
-        
-        # Executive summary
-        logger.info(f"{self.name}: Creating executive summary...")
-        content.extend(self._create_executive_summary(analysis_results))
-        
-        # Raw dataset analysis
-        logger.info(f"{self.name}: Creating raw dataset analysis...")
-        raw_analysis = analysis_results.get('raw_dataset_analysis', {})
-        content.extend(self._create_raw_dataset_analysis(raw_analysis))
-        
-        # Cleaning and transformation analysis
-        logger.info(f"{self.name}: Creating cleaning analysis...")
-        cleaned_analysis = analysis_results.get('cleaned_dataset_analysis', {})
-        content.extend(self._create_cleaning_transformation_analysis(cleaned_analysis))
-        
-        # Quality metrics summary
-        logger.info(f"{self.name}: Creating quality metrics...")
-        content.extend(self._create_quality_metrics_summary(verification_results))
-        
-        # Recommendations
-        logger.info(f"{self.name}: Creating recommendations...")
-        content.extend(self._create_recommendations_section(analysis_results))
-        
-        # Appendix
-        logger.info(f"{self.name}: Creating appendix...")
-        content.extend(self._create_appendix(analysis_results))
-        
-        # Build PDF
-        doc.build(content, onFirstPage=self._create_header_footer, 
-                 onLaterPages=self._create_header_footer)
-        
-        logger.info(f"{self.name}: PDF report generated successfully: {output_path}")
+        report_md = llm.invoke(prompt)
+        return report_md
+
+    def generate_report(self, output_path: str, analysis_results: Dict[str, Any], verification_results: Dict[str, Any]) -> str:
+        """
+        Generate the report using LLM and save as Markdown.
+        """
+        report_md = self._generate_report_with_llm(analysis_results, verification_results)
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(report_md)
         return output_path
-    
+
     def process(self, analysis_results: Dict[str, Any], 
                 verification_results: Dict[str, Any]) -> Dict[str, Any]:
         """
