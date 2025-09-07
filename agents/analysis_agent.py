@@ -12,12 +12,6 @@ try:
     GROQ_AVAILABLE = True
 except ImportError:
     GROQ_AVAILABLE = False
-    
-# try:
-#     from langchain_openai import ChatOpenAI
-#     OPENAI_AVAILABLE = True
-# except ImportError:
-#     OPENAI_AVAILABLE = False
 
 from utils import generate_summary_stats, compare_dataframes
 from config import MODEL_CONFIG
@@ -282,7 +276,6 @@ class AnalysisAgent:
         
         return analysis_result
     
-
     
     def _calculate_raw_quality_score(self, inspection_results: Dict[str, Any]) -> float:
         """Calculate quality score for raw dataset"""

@@ -74,6 +74,9 @@ class SupervisorAgent:
         print(f"Current Step: {step_name}")
         print(f"{'='*60}")
     
+
+
+
     def run_pipeline(self, file_path: str, apply_transformations: bool = True,
                     create_visualizations: bool = True, generate_report: bool = True) -> Dict[str, Any]:
         """
@@ -439,6 +442,10 @@ class SupervisorAgent:
         print("="*80)
 
 
+
+
+
+
 def parse_arguments():
     """Parse command line arguments"""
     parser = argparse.ArgumentParser(
@@ -457,8 +464,8 @@ Examples:
     parser.add_argument(
         '--file', '--filepath_for_raw_data',
         type=str,
-        required=False,  # CHANGED: This was True in your code, now False
-        default=None,    # CHANGED: Added default None
+        required=False,  
+        default=None,    
         help='Path to the input dataset file (CSV, Excel, etc.). If not provided, uses default dataset: data/raw/agricultural_2019_5.csv'
     )
     
@@ -516,6 +523,10 @@ def validate_file_path(file_path: str) -> bool:
         return False
     
     return True
+
+
+
+
 
 
 def main():

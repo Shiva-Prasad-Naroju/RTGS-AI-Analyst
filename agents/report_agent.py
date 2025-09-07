@@ -1204,6 +1204,11 @@ class ReportAgent:
         }
 
 
+
+
+
+
+
 # For backward compatibility, also create the original ReportAgent class
 # class ReportAgent(EnhancedReportAgent):
 #     """Original Report Agent for backward compatibility"""
