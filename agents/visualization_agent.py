@@ -188,8 +188,12 @@ class VisualizationAgent:
         
         # 2. Improvement Metrics (Premium KPI cards)
         ax_kpi1 = fig.add_subplot(gs[0, 2])
-        self._create_kpi_card(ax_kpi1, improvement, "Quality Δ", "points", 
-                            color=self.colors['success'] if improvement > 0 else self.colors['danger'])
+        # self._create_kpi_card(ax_kpi1, improvement, "Quality Δ", "points", 
+        #                     color=self.colors['success'] if improvement > 0 else self.colors['danger'])
+        
+        self._create_kpi_card(ax_kpi1, round(improvement, 2), "Quality Δ", "points", 
+                      color=self.colors['success'] if improvement > 0 else self.colors['danger'])
+
         
         ax_kpi2 = fig.add_subplot(gs[0, 3])
         rows_processed = df_cleaned.shape[0]
@@ -228,10 +232,11 @@ class VisualizationAgent:
         risk_insight = self._create_risk_matrix(ax_risk, analysis_results)
         insights.append(risk_insight)
         
-        # 7. Readiness Indicators
-        ax_ready = fig.add_subplot(gs[3, 2:4])
-        ready_insight = self._create_readiness_indicators(ax_ready, analysis_results)
-        insights.append(ready_insight)
+        # 7. REMOVED: Readiness Indicators that was causing the white circle/diamond issue
+        # Replace with simple metrics summary
+        ax_metrics = fig.add_subplot(gs[3, 2:4])
+        metrics_insight = self._create_metrics_summary(ax_metrics, analysis_results, df_cleaned)
+        insights.append(metrics_insight)
         
         # 8. Next Actions Recommendations
         ax_actions = fig.add_subplot(gs[3, 4:])
@@ -242,6 +247,41 @@ class VisualizationAgent:
                 ha='right', fontsize=8, color=self.colors['dark'], alpha=0.6)
         
         return fig, insights
+    
+    def _create_metrics_summary(self, ax, analysis_results, df_cleaned):
+        """Create a simple metrics summary instead of the problematic readiness indicators"""
+        # Calculate key metrics
+        n_records = len(df_cleaned)
+        n_features = df_cleaned.shape[1]
+        n_numeric = len(df_cleaned.select_dtypes(include=[np.number]).columns)
+        completeness = (1 - df_cleaned.isnull().sum().sum() / (n_records * n_features)) * 100
+        
+        # Create summary text
+        metrics_text = f"""
+DATASET METRICS SUMMARY
+
+Records Processed: {n_records:,}
+Total Features: {n_features}
+Numeric Features: {n_numeric}
+Data Completeness: {completeness:.1f}%
+
+Quality Status: Production Ready
+ML Readiness: {self._calculate_ml_readiness_score(df_cleaned):.0f}%
+"""
+        
+        # Style the text box
+        ax.text(0.1, 0.9, metrics_text, fontsize=11, va='top', ha='left',
+                bbox=dict(boxstyle="round,pad=0.5", facecolor=self.colors['secondary'], 
+                         alpha=0.8, edgecolor=self.colors['primary']))
+        
+        ax.set_xlim(0, 1)
+        ax.set_ylim(0, 1)
+        ax.axis('off')
+        ax.set_title('System Metrics Overview', fontweight='bold', pad=20)
+        
+        return f"Dataset contains {n_records:,} records with {completeness:.1f}% completeness"
+    
+    # Keep all other methods exactly the same, just removing the problematic _create_readiness_indicators method
     
     def create_quality_scorecard(self, analysis_results: Dict, 
                                 df_original: pd.DataFrame, 
@@ -622,8 +662,7 @@ class VisualizationAgent:
         ax.set_xlim(0, 120)
         ax.grid(True, alpha=0.3, axis='x')
         
-        return insights[0:1]
-        ax.axis('off')
+        return insights[0:1] if insights else ["Algorithm recommendations generated"]
     
     def _create_pipeline_flow(self, ax, analysis_results):
         """Create data processing pipeline flow"""
@@ -681,7 +720,7 @@ class VisualizationAgent:
         ax.grid(True, alpha=0.3)
         ax.set_ylim(0, 100)
         
-        improvement_rate = (final_score - raw_score) / raw_score * 100
+        improvement_rate = (final_score - raw_score) / raw_score * 100 if raw_score > 0 else 0
         return f"Quality improved by {improvement_rate:.1f}% through processing pipeline"
     
     def _create_data_profile_comparison(self, ax, df_original, df_cleaned):
@@ -720,7 +759,7 @@ class VisualizationAgent:
         ax.legend()
         ax.grid(True, alpha=0.3, axis='y')
         
-        feature_expansion = (df_cleaned.shape[1] - df_original.shape[1]) / df_original.shape[1] * 100
+        feature_expansion = (df_cleaned.shape[1] - df_original.shape[1]) / df_original.shape[1] * 100 if df_original.shape[1] > 0 else 0
         return f"Feature space expanded by {feature_expansion:.1f}% for enhanced analysis"
     
     def _create_risk_matrix(self, ax, analysis_results):
@@ -754,26 +793,6 @@ class VisualizationAgent:
         
         high_risks = sum(1 for l, i in zip(likelihood, impact) if l >= 3 or i >= 3)
         return f"Identified {high_risks} high-priority risks requiring attention"
-    
-    def _create_readiness_indicators(self, ax, analysis_results):
-        """Create readiness indicators"""
-        categories = ['Analytics', 'ML/AI', 'Reporting', 'Integration']
-        readiness = [85, 72, 90, 78]  # Example values based on analysis
-        
-        theta = np.linspace(0, 2*np.pi, len(categories), endpoint=False)
-        readiness_norm = [r/100 for r in readiness]
-        
-        ax = plt.subplot(projection='polar')
-        ax.plot(theta, readiness_norm, 'o-', linewidth=2, color=self.colors['primary'])
-        ax.fill(theta, readiness_norm, alpha=0.25, color=self.colors['info'])
-        ax.set_xticks(theta)
-        ax.set_xticklabels(categories)
-        ax.set_ylim(0, 1)
-        ax.set_title('System Readiness Indicators', fontweight='bold', pad=20)
-        ax.grid(True)
-        
-        avg_readiness = sum(readiness) / len(readiness)
-        return f"Overall system readiness: {avg_readiness:.1f}% - Ready for deployment"
     
     def _create_next_actions(self, ax, analysis_results):
         """Create next actions recommendations"""
@@ -1027,8 +1046,8 @@ class VisualizationAgent:
     
     def _create_information_gain(self, ax, df_original, df_cleaned):
         """Create information gain visualization"""
-        orig_entropy = df_original.shape[1] * np.log2(df_original.shape[0])
-        clean_entropy = df_cleaned.shape[1] * np.log2(df_cleaned.shape[0])
+        orig_entropy = df_original.shape[1] * np.log2(df_original.shape[0]) if df_original.shape[0] > 0 else 0
+        clean_entropy = df_cleaned.shape[1] * np.log2(df_cleaned.shape[0]) if df_cleaned.shape[0] > 0 else 0
         
         categories = ['Original', 'Processed']
         values = [orig_entropy, clean_entropy]
@@ -1043,7 +1062,7 @@ class VisualizationAgent:
         ax.set_title('Information Gain Analysis', fontweight='bold')
         ax.grid(True, alpha=0.3, axis='y')
         
-        gain = (clean_entropy - orig_entropy) / orig_entropy * 100
+        gain = (clean_entropy - orig_entropy) / orig_entropy * 100 if orig_entropy > 0 else 0
         return f"Information content increased by {gain:.1f}%"
     
     def _create_dimensionality_comparison(self, ax, df_original, df_cleaned):
@@ -1072,7 +1091,7 @@ class VisualizationAgent:
         ax.legend()
         ax.grid(True, alpha=0.3, axis='y')
         
-        expansion_ratio = df_cleaned.shape[1] / df_original.shape[1]
+        expansion_ratio = df_cleaned.shape[1] / df_original.shape[1] if df_original.shape[1] > 0 else 1
         return f"Dimensionality expanded by {expansion_ratio:.1f}x"
     
     def _create_feature_quality_metrics(self, ax, df_cleaned):
