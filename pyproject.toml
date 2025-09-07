@@ -1,7 +1,7 @@
 [project]
 name = "rtgs-ai-analyst"
 version = "0.1.0"
-description = "Add your description here"
+description = "RTGS-AI-Analyst is an intelligent system that automates end-to-end data quality analysis, cleaning, transformation, visualization and reporting."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
