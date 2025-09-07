@@ -1,9 +1,10 @@
 # RTGS AI Analyst
 
-🚀 **RTGS AI Analyst** is an AI-powered system that automates **data ingestion, inspection, cleaning, transformation, quality verification, visualization, and reporting** — providing both structured metrics and **LLM-driven professional insights**.
+⚡ From raw data to polished insights — fully automated with AI-driven cleaning, transformation, and reporting.
 
 ## Overview
-RTGS AI Analyst showcases how AI can seamlessly handle the entire data quality lifecycle — from ingesting raw datasets to identifying issues, applying cleaning and transformations, verifying quality, and generating professional reports.  
+RTGS AI Analyst **automates** the full data quality lifecycle — ingestion, cleaning, transformation, and validation. It detects issues, applies fixes, and ensures datasets are **analysis-ready.**
+Finally, it delivers clear **visualizations** and **professional AI-driven reports.**
 
 ## 🌟 Key Features
 - **Supervisor-Agent Orchestration**: Orchestrator for the whole pipeline.
