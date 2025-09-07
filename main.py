@@ -6,11 +6,12 @@ import pandas as pd
 import logging
 from typing import Dict, Any, Optional
 import os
+import argparse
+import sys
 from datetime import datetime
 from agents.report_agent import ReportAgent
 
 # Import all agents
-
 from agents import (
     IngestionAgent, InspectionAgent, CleaningAgent, TransformationAgent,
     VerificationAgent, AnalysisAgent, VisualizationAgent, ReportAgent
@@ -438,8 +439,90 @@ class SupervisorAgent:
         print("="*80)
 
 
+def parse_arguments():
+    """Parse command line arguments"""
+    parser = argparse.ArgumentParser(
+        description="RTGS AI Analyst - Multi-Agent Data Processing System",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python main.py                                    # Use default dataset (agricultural_2019_5.csv)
+  python main.py --file data/raw/my_dataset.csv     # Use custom dataset
+  python main.py --file /path/to/data.csv --no-transformations
+  python main.py --file data.csv --no-visualizations --no-report
+  python main.py --file data.csv --non-interactive
+        """
+    )
+    
+    parser.add_argument(
+        '--file', '--filepath_for_raw_data',
+        type=str,
+        required=False,  # CHANGED: This was True in your code, now False
+        default=None,    # CHANGED: Added default None
+        help='Path to the input dataset file (CSV, Excel, etc.). If not provided, uses default dataset: data/raw/agricultural_2019_5.csv'
+    )
+    
+    parser.add_argument(
+        '--no-transformations',
+        action='store_true',
+        help='Skip data transformation step'
+    )
+    
+    parser.add_argument(
+        '--no-visualizations',
+        action='store_true',
+        help='Skip visualization creation'
+    )
+    
+    parser.add_argument(
+        '--no-report',
+        action='store_true',
+        help='Skip report generation'
+    )
+    
+    parser.add_argument(
+        '--non-interactive',
+        action='store_true',
+        help='Run in non-interactive mode (automated decisions)'
+    )
+    
+    parser.add_argument(
+        '--output-dir',
+        type=str,
+        default=None,
+        help='Custom output directory for results'
+    )
+    
+    return parser.parse_args()
+
+
+def validate_file_path(file_path: str) -> bool:
+    """Validate the input file path"""
+    if not os.path.exists(file_path):
+        print(f"❌ Error: File not found: {file_path}")
+        return False
+    
+    if not os.path.isfile(file_path):
+        print(f"❌ Error: Path is not a file: {file_path}")
+        return False
+    
+    # Check file extension
+    valid_extensions = ['.csv', '.xlsx', '.xls', '.json', '.parquet']
+    file_ext = os.path.splitext(file_path)[1].lower()
+    
+    if file_ext not in valid_extensions:
+        print(f"❌ Error: Unsupported file format: {file_ext}")
+        print(f"   Supported formats: {', '.join(valid_extensions)}")
+        return False
+    
+    return True
+
+
 def main():
     """Main entry point for the RTGS AI Analyst"""
+    
+    # Parse command line arguments
+    args = parse_arguments()
     
     # Setup logging
     setup_logging()
@@ -447,31 +530,52 @@ def main():
     print("🚀 RTGS AI Analyst - Multi-Agent Data Processing System")
     print("="*60)
     
-    # Example usage with the demo dataset
-
-    # demo_file = "data/raw/Hospitals.csv"
-    demo_file = "data/raw/agricultural_2019_5.csv"
-    # demo_file = "data/raw/consumption_detail_water_works.csv"
+    # Determine which file to use
+    if args.file:
+        # User provided a custom file path
+        file_path = args.file
+        print(f"📂 Using custom dataset: {file_path}")
+    else:
+        # Use default dataset
+        file_path = "data/raw/agricultural_2019_5.csv"
+        print(f"📂 Using default dataset: {file_path}")
+        print("   (To use a different dataset, run: python main.py --file your_dataset.csv)")
     
-    if not os.path.exists(demo_file):
-        print(f"❌ Demo file not found: {demo_file}")
-        print("Please ensure the Hospitals.csv file is in the data/raw/ directory")
-        return
+    # Validate input file
+    if not validate_file_path(file_path):
+        if not args.file:
+            # If using default file and it doesn't exist, provide helpful message
+            print(f"\n💡 Default dataset not found. Please either:")
+            print(f"   1. Place 'agricultural_2019_5.csv' in the 'data/raw/' directory, or")
+            print(f"   2. Specify a custom dataset: python main.py --file your_dataset.csv")
+        sys.exit(1)
     
     # Initialize supervisor
-    supervisor = SupervisorAgent(interactive=True)
+    interactive_mode = not args.non_interactive
+    supervisor = SupervisorAgent(interactive=interactive_mode)
     
-    print(f"\n📂 Processing dataset: {demo_file}")
+    print(f"🔧 Mode: {'Interactive' if interactive_mode else 'Automated'}")
     print("🔄 Starting multi-agent analysis pipeline...")
+    
+    # Configure pipeline options
+    apply_transformations = not args.no_transformations
+    create_visualizations = not args.no_visualizations
+    generate_report = not args.no_report
+    
+    if not apply_transformations:
+        print("⚠️  Transformations disabled")
+    if not create_visualizations:
+        print("⚠️  Visualizations disabled")
+    if not generate_report:
+        print("⚠️  Report generation disabled")
     
     # Run the complete pipeline
     result = supervisor.run_pipeline(
-        file_path=demo_file,
-        apply_transformations=True,
-        create_visualizations=True,
-        generate_report=True
+        file_path=file_path,
+        apply_transformations=apply_transformations,
+        create_visualizations=create_visualizations,
+        generate_report=generate_report
     )
-
     
     # Display final summary
     supervisor.display_final_summary(result)
@@ -485,4 +589,13 @@ def main():
 
 
 if __name__ == "__main__":
-    result = main()
+    try:
+        result = main()
+        # Exit with appropriate code
+        sys.exit(0 if result.get('status') == 'SUCCESS' else 1)
+    except KeyboardInterrupt:
+        print("\n\n❌ Pipeline interrupted by user")
+        sys.exit(130)
+    except Exception as e:
+        print(f"\n❌ Fatal error: {str(e)}")
+        sys.exit(1)
