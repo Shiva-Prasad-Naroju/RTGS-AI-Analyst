@@ -1,9 +1,9 @@
 # RTGS AI Analyst
 
-**🚀 RTGS AI Analyst** is an AI-powered system that automates data ingestion, inspection, cleaning, transformation, quality verification, visualization, and reporting — delivering both structured metrics and **LLM-powered professional insights.**
+🚀 **RTGS AI Analyst** is an AI-powered system that automates **data ingestion, inspection, cleaning, transformation, quality verification, visualization, and reporting** — providing both structured metrics and **LLM-driven professional insights**.
 
-## Overview:
-TTGS AI Analyst demonstrates how AI can automatically ingest, inspect, identify quality issues, clean data, and generate professional reports for any raw datasets. The system uses a **Supervisor-Agent architecture** with 8 specialized agents working together to transform raw data into analysis-ready datasets
+## Overview
+RTGS AI Analyst showcases how AI can seamlessly handle the entire data quality lifecycle — from ingesting raw datasets to identifying issues, applying cleaning and transformations, verifying quality, and generating professional reports.  
 
 ## 🌟 Key Features
 - **Supervisor-Agent Orchestration**: Orchestrator for the whole pipeline.
@@ -130,8 +130,8 @@ rtgs-ai-analyst/
 ├── main.py                 # Main entry point and CLI
 ├── config.py              # Configuration settings
 ├── requirements.txt       # Python dependencies
-├── README.md             # This file
-├── 
+├── README.md             
+├── utils.py
 ├── agents/               # AI Agent modules
 │   ├── __init__.py
 │   ├── ingestion_agent.py
@@ -142,7 +142,6 @@ rtgs-ai-analyst/
 │   ├── analysis_agent.py
 │   ├── visualization_agent.py
 │   └── report_agent.py
-├── 
 ├── utils/               # Utility functions
 │   ├── __init__.py
 │   ├── data_utils.py
@@ -235,7 +234,7 @@ rtgs-ai-analyst/
 - Actionable recommendations
 
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Built with Python, langchain, GROQ inference.
 - Thanks to the open-source community for excellent libraries
