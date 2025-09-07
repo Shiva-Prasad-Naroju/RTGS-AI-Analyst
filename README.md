@@ -162,10 +162,10 @@ rtgs-ai-analyst/
 ## Sample Output
 
 ### Data Quality & Trends
-![Data Quality Chart](./output_chart.png)
+![Data Quality Chart](outputs/output_chart.png)
 
 ### Generated Report
-![Analysis Report](./output_report.png)
+![Analysis Report](outputs/output_report.png)
 
 
 ## ⚙️ Configuration
