@@ -16,6 +16,12 @@ Finally, it delivers clear **visualizations** and **professional AI-driven repor
 - **Executive Summaries**: Auto-generated stakeholder-friendly reports.
 - **CLI Support**: Run complete pipeline with a single command.
 
+## 🎥 Project Explanation
+
+For a detailed walkthrough of the project, check out the video explanation:  
+
+[▶️ Watch Project Explanation](https://drive.google.com/file/d/1nz-z5bqHz1sAKeBs5gBCBKEPcYNCpCVH/view?usp=drivesdk)
+
 
 ## 🚀 RTGS AI Analyst - Workflow
 

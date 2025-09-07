@@ -75,8 +75,6 @@ class SupervisorAgent:
         print(f"{'='*60}")
     
 
-
-
     def run_pipeline(self, file_path: str, apply_transformations: bool = True,
                     create_visualizations: bool = True, generate_report: bool = True) -> Dict[str, Any]:
         """
@@ -443,9 +441,6 @@ class SupervisorAgent:
 
 
 
-
-
-
 def parse_arguments():
     """Parse command line arguments"""
     parser = argparse.ArgumentParser(
@@ -523,10 +518,6 @@ def validate_file_path(file_path: str) -> bool:
         return False
     
     return True
-
-
-
-
 
 
 def main():

@@ -36,14 +36,7 @@ class AnalysisAgent:
                     model_name=MODEL_CONFIG.groq_model,
                     temperature=MODEL_CONFIG.groq_temperature
                 )
-            # Fallback to OpenAI
-            # elif OPENAI_AVAILABLE and MODEL_CONFIG.openai_api_key:
-            #     logger.info(f"{self.name}: Using OpenAI GPT-3.5-Turbo")
-            #     return ChatOpenAI(
-            #         openai_api_key=MODEL_CONFIG.openai_api_key,
-            #         model_name=MODEL_CONFIG.openai_model,
-            #         temperature=MODEL_CONFIG.openai_temperature
-            #     )
+
             else:
                 logger.warning(f"{self.name}: No LLM available, using rule-based analysis")
                 return None
