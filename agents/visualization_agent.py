@@ -256,6 +256,8 @@ class VisualizationAgent:
         n_numeric = len(df_cleaned.select_dtypes(include=[np.number]).columns)
         completeness = (1 - df_cleaned.isnull().sum().sum() / (n_records * n_features)) * 100
         
+
+        
         # Create summary text
         metrics_text = f"""
 DATASET METRICS SUMMARY
