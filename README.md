@@ -6,8 +6,6 @@
 RTGS AI Analyst **automates** the full data quality lifecycle — ingestion, cleaning, transformation, and validation. It detects issues, applies fixes, and ensures datasets are **analysis-ready.**
 Finally, it delivers clear **visualizations** and **professional AI-driven reports.**
 
-
-
 ## 🌟 Key Features
 - **Supervisor-Agent Orchestration**: Orchestrator for the whole pipeline.
 - **Modular Multi-Agent Workflow**:
@@ -22,25 +20,27 @@ Finally, it delivers clear **visualizations** and **professional AI-driven repor
 
 For a detailed walkthrough of the project, check out the video explanation:  
 
-[▶️ Watch Project Explanation](https://drive.google.com/file/d/1nz-z5bqHz1sAKeBs5gBCBKEPcYNCpCVH/view?usp=drivesdk)
+[▶️ Watch Project Explanation](https://drive.google.com/file/d/1NP22ZLqshSQICbnwUkze-kEw5Q2C-UU9/view?usp=sharing)
 
 
 ## 🚀 RTGS AI Analyst - Workflow
 
+
 ```mermaid
 flowchart TD
-    A[📂 Ingestion Agent] --> B[🔍 Inspection Agent]
+    S[🎯 Supervisor Agent] --> A[📂 Ingestion Agent]
+    A --> B[🔍 Inspection Agent]
     B --> C[🧹 Cleaning Agent]
     C -->|apply_transformations=True| D[🔧 Transformation Agent]
     C -->|apply_transformations=False| E[⏭️ Skip Transformation]
     D --> F[✅ Verification Agent]
     E --> F[✅ Verification Agent]
     F --> G[📊 Analysis Agent]
-    G -->|create_visualizations=True| H[📈 Visualization Agent]
-    G -->|create_visualizations=False| I[⏭️ Skip Visualization]
-    H --> J[📝 Report Agent]
-    I --> J[📝 Report Agent]
-    J --> K[💾 Save Final Datasets]
+    G --> H[📈 Visualization Agent]
+    G --> J[📝 Report Agent]
+    G --> K[💾 Cleaned Dataset]
+    H --> L[📄 visualizations.pdf]
+    J --> M[📋 report.pdf]
 ```
 
 ## ✨ Key Features
